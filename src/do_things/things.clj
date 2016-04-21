@@ -24,4 +24,18 @@
   (def error-message (str error-message "MILDLY INCONVENIENCED!"))
   (def error-message (str error-message "DOOOOOOOMED!")))
 ; So, contrary to my original supposition, the definition of error-message can
-; indeed be over-written so this does work. 
+; indeed be over-written so this does work.
+
+(def keys {"string-key" + :subtract -})
+
+((get keys "string-key") 1 2)
+
+((keys "string-key") 1 2)
+
+(("string-key" keys) 1 2) ;this is not valid
+((keys "string-key") 1 2) ; this works.
+((:subtract keys) 1 2) ;key as function map as argument. Book recommends this way.
+((keys :subtract) 1 2) ;map is function, key is argument
+
+
+;--------------VECTORS-------------------------
