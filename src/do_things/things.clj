@@ -39,3 +39,44 @@
 
 
 ;--------------VECTORS-------------------------
+(defn announce-treasure-location
+  [{:keys [lat lng]}]
+  (println (str "Treasure lat: " lat))
+  (println (str "Treasure lng: " lng)))
+
+(announce-treasure-location {:lat 28.22 :lng 81.33})
+
+(map (fn [name] (str "Hi, " name))
+  ["Darth Vader" "Mr. Magoo"]) ; the fuction has ariety 1 and prints a string with
+; hi and the passed argument. Map applies this function to each member of the collection.
+
+; would it work on an map? Looks like it. The " character is escaped with \
+(map (fn [name] (str "Hi, " name))
+  {:name1 "Darth Vader" :name2 "Mr. Magoo"})
+
+
+(let [x 3]
+  x)
+
+(def dalmatian-list
+  ["Pongo" "Perdita" "Puppy 1" "Puppy 2"])
+(let [dalmatians (take 2 dalmatian-list)]
+  dalmatians)
+
+(let [[sam & dalmatians] dalmatian-list] ; destructure the dalmatian-list into the first one and the rest
+  [sam dalmatians])
+
+(re-find #"^left-" "left-eye")
+(re-find #"^left-" "cleft-chin")
+(re-find #"^left-" "wonglblart")
+
+
+(defn my-reduce
+  ([f initial coll]
+   (loop [result initial
+          remaining coll]
+     (if (empty? remaining)
+       result
+       (recur (f result (first remaining)) (rest remaining)))))
+  ([f [head & tail]]
+   (my-reduce f head tail)))
