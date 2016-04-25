@@ -80,3 +80,52 @@
        (recur (f result (first remaining)) (rest remaining)))))
   ([f [head & tail]]
    (my-reduce f head tail)))
+
+
+;---------------------------------------------
+;-----------------------Exercises
+;---------------------------------------------
+(defn add100 [number]
+  (+ number 100))
+;--------------------------------------------
+(defn dec-maker
+  [dec-by]
+  #(- % dec-by))
+
+(defn dec-maker2
+  [dec-by]
+  (fn [num] (- num dec-by)))
+
+(def dec3 (dec-maker2 3))
+(dec3 7)
+;--------------------------------------------
+(map inc [1 1 2 2])
+(hash-set 1 1 2 2)
+(get [1 1 2 2])
+
+(defn mapset
+  [f collection]
+  (set (map f collection)))
+
+(mapset inc [1 3 2 2]) ; I guess this is an acceptable solution assuming order doesn't matter.
+
+;ANOTHER mapset
+(defn mapset2
+  [f collection]
+  (into #{} (map f collection)))
+
+(mapset2 inc [1 1 2 2])
+;---------------------------
+;Create a function that’s similar to symmetrize-body-parts except that it has to work with weird space aliens with radial symmetry. Instead of two eyes, arms, legs, and so on, they have five.
+
+(defn symmetrize-body-parts
+  "Expects a seq of maps that have a :name and :size"
+  [asym-body-parts]
+  ;      local variable       value           local variable  value
+  (loop [remaining-asym-parts asym-body-parts final-body-parts []]
+    (if (empty? remaining-asym-parts)
+      final-body-parts
+      (let [[part & remaining] remaining-asym-parts]
+        (recur remaining
+          (into final-body-parts
+            (set [part (matching-part part)])))))))
