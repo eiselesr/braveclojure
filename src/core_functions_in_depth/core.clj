@@ -1,3 +1,33 @@
+(defn titleize
+  [topic]
+  (str topic " for the Brave and True"))
+
+(map titleize ["Hamsters" "Ragnarok"])
+; => ("Hamsters for the Brave and True" "Ragnarok for the Brave and True")
+
+(map titleize '("Empathy" "Decorating"))
+; => ("Empathy for the Brave and True" "Decorating for the Brave and True")
+
+(map titleize #{"Elbows" "Soap Carving"})
+; => ("Elbows for the Brave and True" "Soap Carving for the Brave and True")
+(map #(titleize %)(hash-set "kurt-vonnegut" 20 :icicle))
+(map #(titleize (second %)) {:key "Winking" :fun "gil"})
+; => ("Winking for the Brave and True")
+( #( first %) {:key "Winking" :fun "gil"})
+(titleize (#(second %) {:key "Winking" :fun "gil"}))
+
+(map #(titleize (first %)) (hash-set "kurt-vonnegut" :20 :icicle))
+(hash-set "kurt-vonnegut" 20 :icicle)
+(first (hash-set "kurt-vonnegut" :20 :icicle))
+#(titleize (first (hash-set "kurt-vonnegut" :20 :icicle)))
+;------------------------------------------------------------------------
+(def node3 {:value "last" :next nil})
+(def node2 {:value "middle" :next node3})
+(def node1 {:value "first" :next node2})
+
+(first node2)
+
+
 
 (def human-consumption   [8.1 7.3 6.6 5.0]); creating a vector
 (def critter-consumption [0.0 0.2 0.3 1.1])
@@ -98,4 +128,4 @@
 ;Lazy Seq
 
 (def vampire-database
-  {0 {:makes-blood-puns? false, }})
+  {0 {:makes-blood-puns? false,}})
