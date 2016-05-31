@@ -127,5 +127,79 @@
 ;-------------------------------------------------------
 ;Lazy Seq
 
+
+
+
+(some #(and (> (:critter %) 3) %) food-journal)
+
+(:critter (first [{:month 1 :day 1 :human 5.3 :critter 2.3}]))
+(some true (:critter food-journal))
+
+;---------------------------------------------------------------------
 (def vampire-database
-  {0 {:makes-blood-puns? false,}})
+  {0 {:makes-blood-puns? false, :has-pulse? true, :name "McFishWich"}
+   1 {:makes-blood-puns? false, :has-pulse? true, :name "McMackson"}
+   2 {:makes-blood-puns? true,  :has-pulse? false, :name "Damon Salvatore"}
+   3 {:makes-blood-puns? true, :has-pulse? true, :name "Mickey Mouse"}})
+
+(defn vampire-related-details
+  [social-security-number]
+  (Thread/sleep 1000)
+  (get vampire-database social-security-number))
+
+(defn vampire?
+  [record]
+  (and (:makes-blood-puns? record)
+       (not (:has-pulse? record))
+       record))
+
+(defn identify-vampire
+  [social-security-numbers]
+  (first (filter vampire?
+                 (map vampire-related-details social-security-numbers))))
+
+(time (vampire-related-details 0))
+
+(time (def mapped-details (map vampire-related-details (range 0 1000000))))
+
+(time
+  (first mapped-details))
+
+(keys vampire-database)
+
+(time
+  (identify-vampire (range 0 1000000)))
+;------------------------------------------------------------------------------
+(take 5 (repeatedly (fn [] (rand-int 10))))
+
+
+(defn even-numbers
+  ([] (even-numbers 0))
+  ([n] (cons n (lazy-seq (even-numbers (+ n 2))))))
+
+(take 10 (even-numbers 1))
+; This function doesn't work properly. It just takes the input and adds 2, then puts it in
+; => (0 2 4 6 8 10 12 14 16 18)
+
+(conj {:lastname "Doe" :firstname "John"} {:age 25 :nationality "Chinese"})
+
+;-------------------------------------------------------------------------------
+(defn lousy-logger
+  [log-level message]
+  (condp = log-level
+    :warn (clojure.string/lower-case message)
+    :emergency (clojure.string/upper-case message)))
+
+(def warn (partial lousy-logger :warn))
+(def emergency (partial lousy-logger :emergency))
+
+(warn "Red light ahead") ;=>"red light ahead"
+(emergency "red light ahead") ;=> "RED LIGHT AHEAD" => "red light ahead"
+
+;----------------------------------------------------------------------------
+(def my-pos? (complement neg?))
+(my-pos? 1)
+; => true
+
+(my-pos? -1) 
+; => false
