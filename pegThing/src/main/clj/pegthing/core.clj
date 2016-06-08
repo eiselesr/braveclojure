@@ -23,12 +23,14 @@
 (triangular? 6)
 
 (defn row-tri
+  "Generate a lazy sequence whose values are the ends of rows. Return the last one this is the max-pos in the board"
   [row]
   (last (take row tri)))
 
 (row-tri 3)
 
 (defn row-num
+  "Returns which row a particular peg is in"
   [hole]
   (inc (count (take-while #(> hole %) tri))))
 
@@ -183,3 +185,105 @@
   [board p1 p2]
   (if-let [jumped (valid-move? board p1 p2)]
     (move-peg (remove-peg board jumped) p1 p2)))
+
+;-----------------------------------------------------------------------------
+(identity my-board)
+(type my-board)
+(map #(get % 0) my-board) ;(7 1 4 15 13 :rows 6 3 12 2 11 9 5 14 10 8)
+(map #(get % 1) my-board)
+;({:connections {1 3, 2 4, 9 8}, :pegged true}
+; {:connections {4 2, 7 3}, :pegged true}
+; {:connections {1 2, 6 5, 11 7}, :pegged false}
+; {:connections {13 14}, :pegged true}
+; {:connections {3 6, 6 9, 11 12, 15 14}, :pegged true}
+; 5
+; {:connections {4 5, 13 9}, :pegged true}
+; {:connections {8 5, 13 6}, :pegged true}
+; {:connections {5 8, 14 13}, :pegged true}
+; {:connections {7 4, 11 5}, :pegged true}
+; {:connections {2 5, 4 7, 13 12}, :pegged true}
+; {:connections {7 8}, :pegged true}
+; {:connections {12 8}, :pegged true}
+; {:connections {12 13}, :pegged true}
+; {:connections {8 9}, :pegged true}
+; {:connections {3 5, 10 9}, :pegged true})
+(map #(get-in % [1 :pegged]) my-board)
+(map #(get (get % 1) :pegged) my-board)
+(map #(get (second %) :pegged) my-board)
+(filter #(get (second %) :pegged) my-board)
+(type (filter #(get (second %) :pegged) my-board))
+(map first (filter #(get (second %) :pegged) my-board))
+(def pos-with-pegs (map first (filter #(get-in % [1 :pegged]) my-board)))
+(def temp (partial valid-moves my-board))
+(def moveable-pegs (map temp pos-with-pegs))
+(map not-empty moveable-pegs)
+(some not-empty moveable-pegs)
+
+(defn can-move?
+  "Are there any pegs that have legal moves?"
+  [board]
+  (some (comp not-empty (partial valid-moves board))
+    (map first (filter #(get-in % [1 :pegged]) board))))
+
+;------------------------------------------------------------------------------
+
+(def alpha-start 97)
+(def alpha-end 123)
+(def letters (map (comp str char) (range alpha-start alpha-end)))
+(type letters)
+(def pos-chars 3)
+
+(def ansi-styles
+  {:red   "[31m"
+   :green "[32m"
+   :blue  "[34m"
+   :reset "[0m"})
+
+(defn ansi
+  "Produce a string which will apply an ansi style"
+  [style]
+  (str \u001b (style ansi-styles)))
+
+(str (str \u001b "[31m") "text" (str \u001b "[0m"))
+
+(defn colorize
+  "Apply ansi color to text"
+  [text color]
+  (str (ansi color) text (ansi :reset)))
+
+(colorize "test" :blue)
+
+(nth letters (dec 1))
+
+(defn render-pos
+  [board pos]
+  (str (nth letters (dec pos))
+       (if (get-in board [pos :pegged])
+         (str "0")
+         (str "-"))))
+
+(defn row-positions
+  "Return all positions in the given row"
+  [row-num]
+  (range (inc (or (row-tri (dec row-num)) 0))
+         (inc (row-tri row-num))))
+
+(defn row-padding
+  "String of spaces to add to the beginning of a row to center it"
+  [row-num rows]
+  (let [pad-length (/ (* (- rows row-num) pos-chars) 2)]
+    (apply str (take pad-length (repeat " ")))))
+
+(defn render-row
+  [board row-num]
+  (str (row-padding row-num (:rows board))
+       (clojure.string/join " " (map (partial render-pos board)
+                                     (row-positions row-num)))))
+
+;-------------------------------------------------------------------------------
+(defn print-board
+  [board]
+  (doseq [row-num (range 1 (inc (:rows board)))]
+    (println (render-row board row-num))))
+
+(print-board my-board)
