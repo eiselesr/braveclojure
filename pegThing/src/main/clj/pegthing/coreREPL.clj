@@ -14,27 +14,27 @@
 
 (def tri (tri*))
 
-;(take 5 tri)
+(take 5 tri)
 
 (defn triangular?
   [arg]
   (= arg (last(take-while #(<= % arg) tri))))
 
-;(triangular? 6)
+(triangular? 6)
 
 (defn row-tri
   "Generate a lazy sequence whose values are the ends of rows. Return the last one this is the max-pos in the board"
   [row]
   (last (take row tri)))
 
-;(row-tri 3)
+(row-tri 5)
 
 (defn row-num
   "Returns which row a particular peg is in"
   [hole]
   (inc (count (take-while #(> hole %) tri))))
 
-;(row-num 7)
+(row-num 7)
 ;------------------------------------------------------------------------------
 (defn connect
   "Form a mutual connection between two positions"
@@ -48,41 +48,41 @@
             [[pos destination] [destination pos]]) ;thing reduced over.
     board)) ;return the current board if an illegal connection is requested.
 
-;(connect {} 15 1 2 4)
+(connect {} 15 1 2 4)
 ; => {1 {:connections {4 2}} 4 {:connections {1 2}}
 
-;(assoc-in {} [1 :connections 4] 2)
-;(#(assoc-in %1 [(first %2) :connections (last %2)] 2) {} [1 4])
-;(#(assoc-in %1 [%2[0] :connections %2[1]] 2) {} [1 4])
+(assoc-in {} [1 :connections 4] 2)
+(#(assoc-in %1 [(first %2) :connections (last %2)] 2) {} [1 4])
+(#(assoc-in %1 [%2[0] :connections %2[1]] 2) {} [1 4])
 
 (def avector [1 4])
-;(nth avector 1)
-;(get avector 0)
+(nth avector 1)
+(get avector 0)
 
 (def users [{:name "James" :age 26}  {:name "John" :age 43}])
 ;; update the age of the second (index 1) user
-;(assoc-in users [1] 44)
-;(assoc-in users [1 :password] "njho")
+(assoc-in users [1] 44)
+(assoc-in users [1 :password] "njho")
 
 (def assocTest (#(assoc-in %1 [1] {:thing "thing 1"}) [1 4]))
-;(identity assocTest)
-;(assoc-in assocTest [1] {:thing 7})
+(identity assocTest)
+(assoc-in assocTest [1] {:thing 7})
 
-;(reduce
-; (fn [new-board [p1 p2]]
-;     (assoc-in new-board [p1 :connections p2] 2)
-; {}
-; [[1 4] [4 1]])
+(reduce
+ (fn [new-board [p1 p2]]
+     (assoc-in new-board [p1 :connections p2] 2))
+ {}
+ [[1 4] [4 1]])
 
-;(reduce
-; #(assoc-in %1 [(first %2) :connections (last %2)] 2)
-; {}
-; [[1 4] [4 1]])
+(reduce
+ #(assoc-in %1 [(first %2) :connections (last %2)] 2)
+ {}
+ [[1 4] [4 1]])
 
-;(reduce
-;  #(assoc-in %1 [(get %2 0) :connections (get %2 1)] 2)
-;  {}
-;  [[1 4] [4 1]])
+(reduce
+  #(assoc-in %1 [(get %2 0) :connections (get %2 1)] 2)
+  {}
+  [[1 4] [4 1]])
 ;------------------------------------------------------------------------------
 (defn connect-right
   [board max-pos pos]
@@ -105,11 +105,18 @@
         neighbor (+ row pos 1)
         dst (+ 1 row neighbor 1)]
     (connect board max-pos pos neighbor dst)))
+
+(row-num 6)
+(+ 3 6 1)
+(+ 1 3 10 1)
+
+(def tempBoard {:rows 5})
+(connect-down-right tempBoard 15 6)
 ;----------------------------------------------------------------------------
 
-;(assoc-in {} [1 :pegged] true)
+(assoc-in {} [1 :pegged] true)
 (def users [{:name "James" :age 26}  {:name "John" :age 43}])
-;( assoc-in users [1 :pegged] true)
+( assoc-in users [1 :pegged] true)
     ;;=> [{:name "James", :age 26} {:name "John", :age 44}]
 
 (defn add-pos
@@ -122,7 +129,7 @@
       pegged-board
       [connect-right connect-down-left connect-down-right])))
 
-;(add-pos {:rows 5} 15 1)
+(add-pos {:rows 5} 15 1)
     ;-----------------------------------------------------------------------------
 
 (defn new-board
@@ -166,11 +173,11 @@
 
 (def my-board (assoc-in (new-board 5) [4 :pegged] false))
 
-;(valid-moves my-board 1)  ; => {4 2}
-;(valid-moves my-board 6)  ; => {4 5}
-;(valid-moves my-board 11) ; => {4 7}
-;(valid-moves my-board 5)  ; => {}
-;(valid-moves my-board 8)  ; => {}
+(valid-moves my-board 1)  ; => {4 2}
+(valid-moves my-board 6)  ; => {4 5}
+(valid-moves my-board 11) ; => {4 7}
+(valid-moves my-board 5)  ; => {}
+(valid-moves my-board 8)  ; => {}
 
     ;------------------------------------------------------------------------------
 
@@ -179,8 +186,8 @@
   [board p1 p2]
   (get (valid-moves board p1) p2))
 
-;(valid-move? my-board 8 4) ; => nil
-;(valid-move? my-board 1 4) ; => 2
+(valid-move? my-board 8 4) ; => nil
+(valid-move? my-board 1 4) ; => 2
     ;-----------------------------------------------------------------------------
 
 (defn make-move
@@ -189,10 +196,10 @@
     (move-peg (remove-peg board jumped) p1 p2)))
 
     ;-----------------------------------------------------------------------------
-;(identity my-board)
-;(type my-board)
-;(map #(get % 0) my-board) ;(7 1 4 15 13 :rows 6 3 12 2 11 9 5 14 10 8)
-;(map #(get % 1) my-board)
+(identity my-board)
+(type my-board)
+(map #(get % 0) my-board) ;(7 1 4 15 13 :rows 6 3 12 2 11 9 5 14 10 8)
+(map #(get % 1) my-board)
     ;({:connections {1 3, 2 4, 9 8}, :pegged true}
     ; {:connections {4 2, 7 3}, :pegged true}
     ; {:connections {1 2, 6 5, 11 7}, :pegged false}
@@ -209,38 +216,31 @@
     ; {:connections {12 13}, :pegged true}
     ; {:connections {8 9}, :pegged true}
     ; {:connections {3 5, 10 9}, :pegged true})
-;(map #(get-in % [1 :pegged]) my-board)
-(filter #(get-in % [1 :pegged]) my-board)
-;(map #(get (get % 1) :pegged) my-board)
-;(map #(get (second %) :pegged) my-board)
-;(filter #(get (second %) :pegged) my-board)
-;(type (filter #(get (second %) :pegged) my-board))
-;(map first (filter #(get (second %) :pegged) my-board))
+(map #(get-in % [1 :pegged]) my-board)
+(map #(get (get % 1) :pegged) my-board)
+(map #(get (second %) :pegged) my-board)
+(filter #(get (second %) :pegged) my-board)
+(type (filter #(get (second %) :pegged) my-board))
+(map first (filter #(get (second %) :pegged) my-board))
 (def pos-with-pegs (map first (filter #(get-in % [1 :pegged]) my-board)))
 (def temp (partial valid-moves my-board))
 (def moveable-pegs (map temp pos-with-pegs))
-;(map not-empty moveable-pegs)
-;(some not-empty moveable-pegs)
+(map not-empty moveable-pegs)
+(some not-empty moveable-pegs)
 
-(defn can-move? ;read behavior from bottom to top.
+(defn can-move?
   "Are there any pegs that have legal moves?"
   [board]
-  (some ;takes a predicate and a collection. If any member of the collection returns true given the predicate then some returns "true"
-    (comp
-      not-empty ;returns true if map is not-empty
-      (partial valid-moves board)) ;the positions are passed to valid-moves along with the board associated previously and return a map of valid moves of the form {2 4, 9 8}
-    (map first ;applying first to each remaining element returns the positions which have :pegged true
-      (filter ;filter takes a pedicate/boolean and a collection. It returns a lazy sequence consisting of those collection elements that return true
-        #(get-in % [1 :pegged]) ;get-in takes a map and a path. The path is the keyword :pegged, which is either true or false, at index 1 or the second postion which is e.g. {:connections {2 4, 9 8}, :pegged true}
-        board))))
+  (some (comp not-empty (partial valid-moves board))
+    (map first (filter #(get-in % [1 :pegged]) board))))
 
     ;------------------------------------------------------------------------------
 
 (def alpha-start 97)
 (def alpha-end 123)
 (def letters (map (comp str char) (range alpha-start alpha-end)))
-;(type letters)
-;(identity letters)
+(type letters)
+(identity letters)
 
 (def pos-chars 3)
 
@@ -255,23 +255,23 @@
   [style]
   (str \u001b (style ansi-styles)))
 
-;(str (str \u001b "[31m") "text" (str \u001b "[0m"))
+(str (str \u001b "[31m") "text" (str \u001b "[0m"))
 
 (defn colorize
   "Apply ansi color to text"
   [text color]
   (str (ansi color) text (ansi :reset)))
 
-;(colorize "test" :blue)
+(colorize "test" :blue)
 
-;(nth letters (dec 1))
+(nth letters (dec 1))
 
 (defn render-pos
   [board pos]
   (str (nth letters (dec pos))
        (if (get-in board [pos :pegged])
-         (colorize "0" :blue)
-         (colorize "-" :red))))
+         (str "0")
+         (str "-"))))
 
 (defn row-positions
   "Return all positions in the given row"
@@ -297,32 +297,32 @@
         (doseq [row-num (range 1 (inc (:rows board)))]
                (println (render-row board row-num))))
 
-;(print-board my-board)
+(print-board my-board)
 
 
 ;(int "a"); no good
-;(first "a"); =>"a"
-;(int (first "a")); => 97, that works
-;(identity "a"); =>"a"
+(first "a"); =>"a"
+(int (first "a")); => 97, that works
+(identity "a"); =>"a"
 ;(int (identity "a")); => ClassCastException java.lang.String cannot be cast to java.lang.Character  clojure.lang.RT.intCast. Seems like it should work, but no good
-;(int (last "a")); => 97, that works
-;(seq "a");=> ("a")
-;(sequence "a");=> ("a")
-;(get "a" 0)
-;(int (get "a" 0)); => 97, that works
-;(type (get "a" 0)); => java.lang.Character
-;(apply val {:key "a"});=> "a"
-;(type (apply val {:key "a"}));=> java.lang.String
+(int (last "a")); => 97, that works
+(seq "a");=> ("a")
+(sequence "a");=> ("a")
+(get "a" 0)
+(int (get "a" 0)); => 97, that works
+(type (get "a" 0)); => java.lang.Character
+(apply val {:key "a"});=> "a"
+(type (apply val {:key "a"}));=> java.lang.String
 ;(int (apply val {:key "a"})); ClassCastException [trace missing]
 ;(unchecked-char "a")
-;(type (first "abc"))
-;(type (seq "abc"))
-;(first '("abc" "123"))
-;(type (first '("abc" "123")))
-;(map first '("abc" "123"))
-;(type (first (map first '("abc" "123"))))
-;(identity \a);=> "a"
-;(type \a);=> java.lang.Character
+(type (first "abc"))
+(type (seq "abc"))
+(first '("abc" "123"))
+(type (first '("abc" "123")))
+(map first '("abc" "123"))
+(type (first (map first '("abc" "123"))))
+(identity \a);=> "a"
+(type \a);=> java.lang.Character
 
 (defn letter->pos
   "Converts a letter string to the corresponding position number"
@@ -332,14 +332,13 @@
       (int (first letter)) ;turn the string into a char, then an int
       alpha-start)))
 
-;(letter->pos "a")
+(letter->pos "a")
 
 (defn get-input
   "mulitple arity function that takes user input and returns the default provided when the function is called or the input of the user."
   ([] (get-input nil))
   ([default]
-   (let [input (clojure.string/trim
-                 (read-line))]
+   (let [input (clojure.string/trim (read-line))]
     (if (empty? input)
       default
       (clojure.string/lower-case input)))))
@@ -349,13 +348,13 @@
   (filter #(not= " " %)
     (clojure.string/split string #"")))
 
-;(re-seq #"[a-zA-Z]" "a    bc")
+(re-seq #"[a-zA-Z]" "a    bc")
 (defn characters-as-strings-book
   [string]
   (re-seq #"[a-zA-Z]" string))
 
-;(characters-as-strings "a   bc")
-;(characters-as-strings-book "a    bc")
+(characters-as-strings "a   bc")
+(characters-as-strings-book "a    bc")
 
 (defn user-entered-invalid-move
   "Handles when a user enters an invalid move"
@@ -409,8 +408,16 @@
           (System/exit 0))))))
 
 
+(def this-board (new-board 5))
+(:rows this-board)
+(def this-board1(remove-peg this-board (letter->pos "c")))
+(identity this-board1)
+(print-board this-board1)
+(make-move this-board1 (letter->pos "j") (letter->pos "c"))
+
+(valid-moves this-board1 3)
 
 
 
-;(comment
-; "HAHAHA... no comment")
+(comment
+ "HAHAHA... no comment")

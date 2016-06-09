@@ -26,5 +26,5 @@
 
   identity)
 
-
+(use '[pegthing.core])
 ; (clojure.tools.namespace.repl/refresh-dirs)
