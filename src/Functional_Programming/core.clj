@@ -22,7 +22,7 @@
 
 (def add-inc (two-comp inc +))
 
-(apply add-inc '(1 2 3 4 5))
+(apply add-inc '(1 2 3 4 ))
 
 (defn myComp
   [f & fns]
@@ -35,7 +35,7 @@
 (def myCompfunc
   (myComp inc inc inc))
 
-(myCompfunc 1)
+(map myCompfunc [1 2])
 
 (def testcomp
   (comp inc + -))
