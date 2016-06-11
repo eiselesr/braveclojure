@@ -22,7 +22,7 @@
 
 (def add-inc (two-comp inc +))
 
-(apply add-inc '(1 2 3 4 ))
+(apply add-inc '(1 2 3 4))
 
 (defn myComp
   [f & fns]
