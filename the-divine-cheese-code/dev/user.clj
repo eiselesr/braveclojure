@@ -10,6 +10,8 @@
 
 (defn reset []
   (tnr/refresh :after 'user/start)
-  (in-ns 'pegthing.core))
+  (in-ns 'the-divine-cheese-code.core))
 
 (println "proto-repl-demo dev/user.clj loaded.")
+
+;(in-ns 'the-divine-cheese-code.core)
